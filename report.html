@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>R vs C++ Benchmark Brief</title>
+<style>
+:root {
+  --paper: #fbfbf8;
+  --ink: #171717;
+  --muted: #5b5f63;
+  --line: #d9d6cc;
+  --r-blue: #136f9f;
+  --cpp-red: #d33f2f;
+  --yellow: #f1b51c;
+  --green: #14835b;
+  --panel: #ffffff;
+}
+* { box-sizing: border-box; }
+html { background: var(--ink); }
+body {
+  margin: 0;
+  color: var(--ink);
+  background:
+    linear-gradient(90deg, rgba(19,111,159,.08) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(211,63,47,.07) 1px, transparent 1px),
+    var(--paper);
+  background-size: 38px 38px;
+  font-family: "Avenir Next", "Gill Sans", "Trebuchet MS", sans-serif;
+  line-height: 1.5;
+}
+.page {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 34px 0 48px;
+}
+.hero {
+  min-height: 72vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(300px, .88fr);
+  gap: 24px;
+  align-items: stretch;
+  border-top: 8px solid var(--ink);
+  padding-top: 18px;
+}
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 560px;
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  padding: 7px 10px;
+  border: 2px solid var(--ink);
+  background: var(--yellow);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+h1 {
+  margin: 24px 0 0;
+  max-width: 860px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(56px, 10vw, 138px);
+  line-height: .84;
+  letter-spacing: 0;
+}
+.lede {
+  max-width: 710px;
+  margin: 28px 0 0;
+  font-size: clamp(19px, 2vw, 27px);
+  font-weight: 650;
+}
+.stamp {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 32px;
+}
+.stamp div {
+  min-height: 116px;
+  padding: 14px;
+  border: 2px solid var(--ink);
+  background: var(--panel);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.stamp span, .metric span, .kicker {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+th {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+.stamp strong {
+  display: block;
+  margin-top: 10px;
+  font-size: clamp(24px, 3vw, 40px);
+  line-height: 1;
+}
+.scoreboard {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 20px;
+  min-height: 560px;
+  display: grid;
+  align-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+.scoreboard:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, transparent 0 48%, rgba(241,181,28,.95) 48% 51%, transparent 51%),
+    radial-gradient(circle at 84% 12%, rgba(19,111,159,.55), transparent 28%);
+  opacity: .55;
+}
+.scoreboard > * { position: relative; }
+.metric {
+  border: 1px solid rgba(251,251,248,.35);
+  padding: 16px;
+  background: rgba(251,251,248,.06);
+  backdrop-filter: blur(4px);
+}
+.metric + .metric { margin-top: 12px; }
+.metric span { color: #d8d4c8; }
+.metric strong {
+  display: block;
+  margin-top: 8px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 8vw, 92px);
+  line-height: .9;
+  overflow-wrap: anywhere;
+}
+.text-metric strong {
+  font-size: clamp(32px, 4.2vw, 58px);
+  line-height: .94;
+}
+.score-note {
+  margin: 24px 0 0;
+  color: #e8e3d6;
+  font-size: 15px;
+}
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 18px;
+  margin: 38px 0 16px;
+  border-top: 3px solid var(--ink);
+  padding-top: 14px;
+}
+.section-title h2 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(30px, 4vw, 58px);
+  line-height: 1;
+}
+.section-title p {
+  max-width: 520px;
+  margin: 0;
+  color: var(--muted);
+  font-weight: 650;
+}
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.task-card {
+  border: 2px solid var(--ink);
+  background: var(--panel);
+  padding: 18px;
+  box-shadow: 5px 5px 0 rgba(23,23,23,.9);
+}
+.task-card:first-child {
+  grid-column: 1 / -1;
+  background:
+    linear-gradient(90deg, rgba(241,181,28,.22), transparent 56%),
+    var(--panel);
+}
+.task-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: start;
+}
+.task-card h2 {
+  margin: 3px 0 0;
+  font-size: clamp(21px, 2vw, 31px);
+  line-height: 1.05;
+}
+.winner {
+  flex: 0 0 auto;
+  border: 2px solid var(--ink);
+  padding: 7px 9px;
+  font-weight: 900;
+  font-size: 13px;
+  white-space: nowrap;
+  background: var(--yellow);
+}
+.winner.cpp { background: var(--cpp-red); color: white; }
+.winner.r { background: var(--r-blue); color: white; }
+.bars {
+  margin-top: 22px;
+  display: grid;
+  gap: 10px;
+}
+.bar-row {
+  display: grid;
+  grid-template-columns: 48px minmax(120px, 1fr) 82px;
+  gap: 10px;
+  align-items: center;
+}
+.lang {
+  font-weight: 950;
+}
+.track {
+  height: 18px;
+  border: 2px solid var(--ink);
+  background: repeating-linear-gradient(90deg, #f0eee6 0 8px, #ffffff 8px 16px);
+  overflow: hidden;
+}
+.track i {
+  display: block;
+  height: 100%;
+  border-right: 2px solid var(--ink);
+}
+.r-bar .track i { background: var(--r-blue); }
+.cpp-bar .track i { background: var(--cpp-red); }
+.bar-row strong {
+  text-align: right;
+  font-size: 14px;
+}
+.note {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+.table-wrap {
+  overflow-x: auto;
+  border: 2px solid var(--ink);
+  background: var(--panel);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+th, td {
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+td {
+  font-weight: 650;
+}
+tr:nth-child(4n+1), tr:nth-child(4n+2) {
+  background: #f3f6f7;
+}
+.method {
+  display: grid;
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+  gap: 16px;
+}
+.method-box {
+  border: 2px solid var(--ink);
+  background: var(--panel);
+  padding: 18px;
+}
+.method-box h3 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+.method-box p {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.meta-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+.meta-list div {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.meta-list span {
+  color: var(--muted);
+  font-weight: 850;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+.meta-list strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+details {
+  margin-top: 16px;
+  border: 2px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+summary {
+  cursor: pointer;
+  padding: 14px 16px;
+  font-weight: 900;
+}
+pre {
+  margin: 0;
+  padding: 16px;
+  overflow-x: auto;
+  border-top: 1px solid rgba(251,251,248,.28);
+  color: #f8f3df;
+  font-size: 12px;
+}
+@media (max-width: 860px) {
+  .page { width: min(100% - 20px, 1180px); padding-top: 18px; }
+  .hero, .method { grid-template-columns: 1fr; min-height: auto; }
+  .hero-copy, .scoreboard { min-height: auto; }
+  .stamp, .task-grid { grid-template-columns: 1fr; }
+  .task-card:first-child { grid-column: auto; }
+  .section-title { display: block; }
+  .section-title p { margin-top: 10px; }
+  .task-top { display: block; }
+  .winner { display: inline-block; margin-top: 12px; white-space: normal; }
+  .bar-row { grid-template-columns: 42px minmax(90px, 1fr) 72px; }
+  h1 { font-size: clamp(52px, 18vw, 92px); }
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <section class="hero">
+    <div class="hero-copy">
+      <div>
+        <span class="eyebrow">Benchmark Brief</span>
+        <h1>R vs C++</h1>
+        <p class="lede">C++ won 4 of 5 tasks; geometric mean speedup 4.09x. Median elapsed time is used for the headline comparison across seven measured runs per task.</p>
+      </div>
+      <div class="stamp">
+        <div><span>Tasks</span><strong>5</strong></div>
+        <div><span>Iterations</span><strong>7</strong></div>
+        <div><span>Generated</span><strong>17:46</strong></div>
+      </div>
+    </div>
+    <aside class="scoreboard" aria-label="Benchmark highlights">
+      <div>
+        <div class="metric"><span>Geomean speedup</span><strong>4.09x</strong></div>
+        <div class="metric"><span>Largest C++ edge</span><strong>28.50x</strong></div>
+        <div class="metric text-metric"><span>Closest contest</span><strong>Matrix multiplication</strong></div>
+      </div>
+      <p class="score-note">Matrix multiplication is deliberately included, but it mostly measures calls into native BLAS rather than hand-written language loops.</p>
+    </aside>
+  </section>
+
+  <section>
+    <div class="section-title">
+      <h2>Median Results</h2>
+      <p>Shorter bars are faster. Both implementations build deterministic data before timing; checksums force the computed results to be used.</p>
+    </div>
+    <div class="task-grid">
+      <article class="task-card"><div class="task-top"><div><p class="kicker">1,200 x 1,200 double matrices</p><h2>Matrix multiplication</h2></div><span class="winner cpp">C++ 1.51x faster</span></div><div class="bars" aria-label="Median timing bars for Matrix multiplication"><div class="bar-row r-bar"><span class="lang">R</span><span class="track"><i style="width:100.00%"></i></span><strong>12.0 ms</strong></div><div class="bar-row cpp-bar"><span class="lang">C++</span><span class="track"><i style="width:66.22%"></i></span><strong>7.95 ms</strong></div></div><p class="note">R uses %*%; C++ calls cblas_dgemm through Accelerate on this Mac.</p></article>
+      <article class="task-card"><div class="task-top"><div><p class="kicker">6,000,000 doubles</p><h2>Element-wise numeric transform</h2></div><span class="winner cpp">C++ 1.97x faster</span></div><div class="bars" aria-label="Median timing bars for Element-wise numeric transform"><div class="bar-row r-bar"><span class="lang">R</span><span class="track"><i style="width:100.00%"></i></span><strong>92.0 ms</strong></div><div class="bar-row cpp-bar"><span class="lang">C++</span><span class="track"><i style="width:50.63%"></i></span><strong>46.6 ms</strong></div></div><p class="note">sqrt(abs(x)) * sin(x) + cos(0.5 * x), reduced to one checksum.</p></article>
+      <article class="task-card"><div class="task-top"><div><p class="kicker">1,000,000 doubles</p><h2>Numeric sorting</h2></div><span class="winner r">R 1.86x faster</span></div><div class="bars" aria-label="Median timing bars for Numeric sorting"><div class="bar-row r-bar"><span class="lang">R</span><span class="track"><i style="width:53.69%"></i></span><strong>37.0 ms</strong></div><div class="bar-row cpp-bar"><span class="lang">C++</span><span class="track"><i style="width:100.00%"></i></span><strong>68.9 ms</strong></div></div><p class="note">R sort() uses optimized native sorting; C++ uses generic std::sort on a copied numeric vector.</p></article>
+      <article class="task-card"><div class="task-top"><div><p class="kicker">5,000,000 rows, 1,000 groups</p><h2>Group-by summation</h2></div><span class="winner cpp">C++ 25.09x faster</span></div><div class="bars" aria-label="Median timing bars for Group-by summation"><div class="bar-row r-bar"><span class="lang">R</span><span class="track"><i style="width:100.00%"></i></span><strong>54.0 ms</strong></div><div class="bar-row cpp-bar"><span class="lang">C++</span><span class="track"><i style="width:3.99%"></i></span><strong>2.15 ms</strong></div></div><p class="note">R rowsum() versus a direct C++ accumulation loop.</p></article>
+      <article class="task-card"><div class="task-top"><div><p class="kicker">250,000 delimited strings</p><h2>Text field parsing</h2></div><span class="winner cpp">C++ 28.50x faster</span></div><div class="bars" aria-label="Median timing bars for Text field parsing"><div class="bar-row r-bar"><span class="lang">R</span><span class="track"><i style="width:100.00%"></i></span><strong>120 ms</strong></div><div class="bar-row cpp-bar"><span class="lang">C++</span><span class="track"><i style="width:3.51%"></i></span><strong>4.21 ms</strong></div></div><p class="note">R regex extraction versus C++ delimiter scan and strtod.</p></article>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title">
+      <h2>Timing Table</h2>
+      <p>Mean and standard deviation are included to make noisy runs visible without hiding the raw measurements.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Task</th><th>Language</th><th>Median</th><th>Mean</th><th>Std. dev.</th><th>Speedup</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Matrix multiplication</td><td>R</td><td>12.0 ms</td><td>12.0 ms</td><td>1.63 ms</td><td rowspan="2">1.51x C++</td></tr>
+          <tr><td>Matrix multiplication</td><td>C++</td><td>7.95 ms</td><td>8.10 ms</td><td>0.40 ms</td></tr>
+          <tr><td>Element-wise numeric transform</td><td>R</td><td>92.0 ms</td><td>93.4 ms</td><td>7.21 ms</td><td rowspan="2">1.97x C++</td></tr>
+          <tr><td>Element-wise numeric transform</td><td>C++</td><td>46.6 ms</td><td>46.6 ms</td><td>0.32 ms</td></tr>
+          <tr><td>Numeric sorting</td><td>R</td><td>37.0 ms</td><td>36.7 ms</td><td>1.25 ms</td><td rowspan="2">1.86x R</td></tr>
+          <tr><td>Numeric sorting</td><td>C++</td><td>68.9 ms</td><td>68.9 ms</td><td>0.27 ms</td></tr>
+          <tr><td>Group-by summation</td><td>R</td><td>54.0 ms</td><td>51.9 ms</td><td>5.27 ms</td><td rowspan="2">25.09x C++</td></tr>
+          <tr><td>Group-by summation</td><td>C++</td><td>2.15 ms</td><td>2.15 ms</td><td>0.02 ms</td></tr>
+          <tr><td>Text field parsing</td><td>R</td><td>120 ms</td><td>122 ms</td><td>5.21 ms</td><td rowspan="2">28.50x C++</td></tr>
+          <tr><td>Text field parsing</td><td>C++</td><td>4.21 ms</td><td>4.18 ms</td><td>0.06 ms</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title">
+      <h2>Method</h2>
+      <p>This is a practical local benchmark, not a universal claim about either language.</p>
+    </div>
+    <div class="method">
+      <div class="method-box">
+        <h3>How to rerun</h3>
+        <p>From this directory, run <code>./run_benchmarks.sh</code>. Set <code>BENCH_ITERATIONS=12</code> to collect more repetitions.</p>
+        <p>The runner compiles C++ with <code>-O3 -std=c++17 -DNDEBUG</code>, executes both benchmark programs, writes <code>results/timings.csv</code>, and rebuilds this report.</p>
+      </div>
+      <div class="method-box">
+        <h3>Environment</h3>
+        <div class="meta-list">
+          <div><span>CPU</span><strong>Apple M1 Pro</strong></div>
+          <div><span>R</span><strong>R version 4.5.2 (2025-10-31)</strong></div>
+          <div><span>BLAS</span><strong>/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib</strong></div>
+          <div><span>Compiler</span><strong>Apple clang version 17.0.0 (clang-1700.3.19.1)</strong></div>
+          <div><span>Timestamp</span><strong>2026-06-10 17:46:00 CEST</strong></div>
+        </div>
+      </div>
+    </div>
+    <details>
+      <summary>Embedded raw CSV</summary>
+      <pre>language,task_id,task_name,iteration,elapsed_ms,checksum
+R,matrix_multiply,&quot;Matrix multiplication&quot;,1,9.000000000000,-524335.137767753447
+R,matrix_multiply,&quot;Matrix multiplication&quot;,2,11.000000000000,-524335.137767753447
+R,matrix_multiply,&quot;Matrix multiplication&quot;,3,12.000000000000,-524335.137767753447
+R,matrix_multiply,&quot;Matrix multiplication&quot;,4,14.000000000000,-524335.137767753447
+R,matrix_multiply,&quot;Matrix multiplication&quot;,5,13.000000000000,-524335.137767753447
+R,matrix_multiply,&quot;Matrix multiplication&quot;,6,13.000000000000,-524335.137767753447
+R,matrix_multiply,&quot;Matrix multiplication&quot;,7,12.000000000000,-524335.137767753447
+R,numeric_transform,&quot;Element-wise numeric transform&quot;,1,85.000000000000,334702.664900351025
+R,numeric_transform,&quot;Element-wise numeric transform&quot;,2,92.000000000000,334702.664900351025
+R,numeric_transform,&quot;Element-wise numeric transform&quot;,3,90.000000000000,334702.664900351025
+R,numeric_transform,&quot;Element-wise numeric transform&quot;,4,98.000000000000,334702.664900351025
+R,numeric_transform,&quot;Element-wise numeric transform&quot;,5,106.000000000000,334702.664900351025
+R,numeric_transform,&quot;Element-wise numeric transform&quot;,6,96.000000000000,334702.664900351025
+R,numeric_transform,&quot;Element-wise numeric transform&quot;,7,87.000000000000,334702.664900351025
+R,sorting,&quot;Numeric sorting&quot;,1,39.000000000000,1.499330694589
+R,sorting,&quot;Numeric sorting&quot;,2,37.000000000000,1.499330694589
+R,sorting,&quot;Numeric sorting&quot;,3,36.000000000000,1.499330694589
+R,sorting,&quot;Numeric sorting&quot;,4,35.000000000000,1.499330694589
+R,sorting,&quot;Numeric sorting&quot;,5,37.000000000000,1.499330694589
+R,sorting,&quot;Numeric sorting&quot;,6,36.000000000000,1.499330694589
+R,sorting,&quot;Numeric sorting&quot;,7,37.000000000000,1.499330694589
+R,group_sum,&quot;Group-by summation&quot;,1,47.000000000000,2502601.286957268603
+R,group_sum,&quot;Group-by summation&quot;,2,60.000000000000,2502601.286957268603
+R,group_sum,&quot;Group-by summation&quot;,3,46.000000000000,2502601.286957268603
+R,group_sum,&quot;Group-by summation&quot;,4,54.000000000000,2502601.286957268603
+R,group_sum,&quot;Group-by summation&quot;,5,55.000000000000,2502601.286957268603
+R,group_sum,&quot;Group-by summation&quot;,6,47.000000000000,2502601.286957268603
+R,group_sum,&quot;Group-by summation&quot;,7,54.000000000000,2502601.286957268603
+R,text_parse,&quot;Text field parsing&quot;,1,133.000000000000,124661250.000000000000
+R,text_parse,&quot;Text field parsing&quot;,2,120.000000000000,124661250.000000000000
+R,text_parse,&quot;Text field parsing&quot;,3,118.000000000000,124661250.000000000000
+R,text_parse,&quot;Text field parsing&quot;,4,123.000000000000,124661250.000000000000
+R,text_parse,&quot;Text field parsing&quot;,5,121.000000000000,124661250.000000000000
+R,text_parse,&quot;Text field parsing&quot;,6,120.000000000000,124661250.000000000000
+R,text_parse,&quot;Text field parsing&quot;,7,118.000000000000,124661250.000000000000
+C++,matrix_multiply,&quot;Matrix multiplication&quot;,1,7.865750000000,-524335.137767754029
+C++,matrix_multiply,&quot;Matrix multiplication&quot;,2,7.660541000000,-524335.137767754029
+C++,matrix_multiply,&quot;Matrix multiplication&quot;,3,8.444417000000,-524335.137767754029
+C++,matrix_multiply,&quot;Matrix multiplication&quot;,4,7.946166000000,-524335.137767754029
+C++,matrix_multiply,&quot;Matrix multiplication&quot;,5,8.813167000000,-524335.137767754029
+C++,matrix_multiply,&quot;Matrix multiplication&quot;,6,7.892125000000,-524335.137767754029
+C++,matrix_multiply,&quot;Matrix multiplication&quot;,7,8.050375000000,-524335.137767754029
+C++,numeric_transform,&quot;Element-wise numeric transform&quot;,1,46.725125000000,334702.664900351141
+C++,numeric_transform,&quot;Element-wise numeric transform&quot;,2,46.370208000000,334702.664900351141
+C++,numeric_transform,&quot;Element-wise numeric transform&quot;,3,46.582334000000,334702.664900351141
+C++,numeric_transform,&quot;Element-wise numeric transform&quot;,4,46.295625000000,334702.664900351141
+C++,numeric_transform,&quot;Element-wise numeric transform&quot;,5,47.164708000000,334702.664900351141
+C++,numeric_transform,&quot;Element-wise numeric transform&quot;,6,46.587792000000,334702.664900351141
+C++,numeric_transform,&quot;Element-wise numeric transform&quot;,7,46.217958000000,334702.664900351141
+C++,sorting,&quot;Numeric sorting&quot;,1,68.422875000000,1.499331194278
+C++,sorting,&quot;Numeric sorting&quot;,2,68.915000000000,1.499331194278
+C++,sorting,&quot;Numeric sorting&quot;,3,68.948208000000,1.499331194278
+C++,sorting,&quot;Numeric sorting&quot;,4,68.855750000000,1.499331194278
+C++,sorting,&quot;Numeric sorting&quot;,5,68.822667000000,1.499331194278
+C++,sorting,&quot;Numeric sorting&quot;,6,69.142500000000,1.499331194278
+C++,sorting,&quot;Numeric sorting&quot;,7,69.256667000000,1.499331194278
+C++,group_sum,&quot;Group-by summation&quot;,1,2.106334000000,2502601.286957268603
+C++,group_sum,&quot;Group-by summation&quot;,2,2.152084000000,2502601.286957268603
+C++,group_sum,&quot;Group-by summation&quot;,3,2.151166000000,2502601.286957268603
+C++,group_sum,&quot;Group-by summation&quot;,4,2.150000000000,2502601.286957268603
+C++,group_sum,&quot;Group-by summation&quot;,5,2.156500000000,2502601.286957268603
+C++,group_sum,&quot;Group-by summation&quot;,6,2.152292000000,2502601.286957268603
+C++,group_sum,&quot;Group-by summation&quot;,7,2.176416000000,2502601.286957268603
+C++,text_parse,&quot;Text field parsing&quot;,1,4.080375000000,124661250.000000000000
+C++,text_parse,&quot;Text field parsing&quot;,2,4.216875000000,124661250.000000000000
+C++,text_parse,&quot;Text field parsing&quot;,3,4.196167000000,124661250.000000000000
+C++,text_parse,&quot;Text field parsing&quot;,4,4.210709000000,124661250.000000000000
+C++,text_parse,&quot;Text field parsing&quot;,5,4.222333000000,124661250.000000000000
+C++,text_parse,&quot;Text field parsing&quot;,6,4.097333000000,124661250.000000000000
+C++,text_parse,&quot;Text field parsing&quot;,7,4.238334000000,124661250.000000000000</pre>
+    </details>
+  </section>
+</main>
+</body>
+</html>

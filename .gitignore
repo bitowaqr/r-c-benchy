@@ -1,0 +1,5 @@
+build/
+results/cpp_timings.csv
+results/r_timings.csv
+results/report-*.png
+.DS_Store
