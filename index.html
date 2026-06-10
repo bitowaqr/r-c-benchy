@@ -11,9 +11,10 @@
   --muted: #5b5f63;
   --line: #d9d6cc;
   --r-blue: #136f9f;
+  --r-matrix: #0a8fa8;
+  --r-datatable: #4b86c5;
   --cpp-red: #d33f2f;
   --yellow: #f1b51c;
-  --green: #14835b;
   --panel: #ffffff;
 }
 * { box-sizing: border-box; }
@@ -72,7 +73,7 @@ h1 {
   letter-spacing: 0;
 }
 .lede {
-  max-width: 710px;
+  max-width: 730px;
   margin: 28px 0 0;
   font-size: clamp(19px, 2vw, 27px);
   font-weight: 650;
@@ -148,8 +149,8 @@ th {
   overflow-wrap: anywhere;
 }
 .text-metric strong {
-  font-size: clamp(32px, 4.2vw, 58px);
-  line-height: .94;
+  font-size: clamp(24px, 3.2vw, 46px);
+  line-height: .98;
 }
 .score-note {
   margin: 24px 0 0;
@@ -172,7 +173,7 @@ th {
   line-height: 1;
 }
 .section-title p {
-  max-width: 520px;
+  max-width: 560px;
   margin: 0;
   color: var(--muted);
   font-weight: 650;
@@ -205,17 +206,26 @@ th {
   font-size: clamp(21px, 2vw, 31px);
   line-height: 1.05;
 }
-.winner {
-  flex: 0 0 auto;
+.winner, .impl-chip {
   border: 2px solid var(--ink);
   padding: 7px 9px;
   font-weight: 900;
   font-size: 13px;
-  white-space: nowrap;
   background: var(--yellow);
 }
-.winner.cpp { background: var(--cpp-red); color: white; }
-.winner.r { background: var(--r-blue); color: white; }
+.winner {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.impl-chip {
+  display: inline-block;
+  min-width: 92px;
+  text-align: center;
+}
+.winner.r-base, .impl-chip.r-base { background: var(--r-blue); color: white; }
+.winner.r-matrix, .impl-chip.r-matrix { background: var(--r-matrix); color: white; }
+.winner.r-data-table, .impl-chip.r-data-table { background: var(--r-datatable); color: white; }
+.winner.cplusplus, .impl-chip.cplusplus { background: var(--cpp-red); color: white; }
 .bars {
   margin-top: 22px;
   display: grid;
@@ -223,12 +233,13 @@ th {
 }
 .bar-row {
   display: grid;
-  grid-template-columns: 48px minmax(120px, 1fr) 82px;
+  grid-template-columns: 104px minmax(120px, 1fr) 82px;
   gap: 10px;
   align-items: center;
 }
 .lang {
   font-weight: 950;
+  font-size: 13px;
 }
 .track {
   height: 18px;
@@ -241,14 +252,21 @@ th {
   height: 100%;
   border-right: 2px solid var(--ink);
 }
-.r-bar .track i { background: var(--r-blue); }
-.cpp-bar .track i { background: var(--cpp-red); }
+.impl-row.r-base .track i { background: var(--r-blue); }
+.impl-row.r-matrix .track i { background: var(--r-matrix); }
+.impl-row.r-data-table .track i { background: var(--r-datatable); }
+.impl-row.cplusplus .track i { background: var(--cpp-red); }
 .bar-row strong {
   text-align: right;
   font-size: 14px;
 }
-.note {
+.comparison {
   margin: 16px 0 0;
+  font-weight: 900;
+  color: var(--ink);
+}
+.note {
+  margin: 8px 0 0;
   color: var(--muted);
   font-size: 14px;
   font-weight: 600;
@@ -261,7 +279,7 @@ th {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 760px;
+  min-width: 900px;
 }
 th, td {
   padding: 13px 14px;
@@ -271,7 +289,7 @@ th, td {
 td {
   font-weight: 650;
 }
-tr:nth-child(4n+1), tr:nth-child(4n+2) {
+tr:nth-child(odd) {
   background: #f3f6f7;
 }
 .method {
@@ -345,7 +363,9 @@ pre {
   .section-title p { margin-top: 10px; }
   .task-top { display: block; }
   .winner { display: inline-block; margin-top: 12px; white-space: normal; }
-  .bar-row { grid-template-columns: 42px minmax(90px, 1fr) 72px; }
+  .bar-row { grid-template-columns: 92px minmax(72px, 1fr) 66px; gap: 7px; }
+  .lang { font-size: 11px; }
+  .bar-row strong { font-size: 12px; }
   h1 { font-size: clamp(52px, 18vw, 92px); }
 }
 </style>
@@ -357,35 +377,35 @@ pre {
       <div>
         <span class="eyebrow">Benchmark Brief</span>
         <h1>R vs C++</h1>
-        <p class="lede">C++ won 4 of 5 tasks; geometric mean speedup 4.09x. Median elapsed time is used for the headline comparison across seven measured runs per task.</p>
+        <p class="lede">Against base R, C++ won 4 of 5 tasks; geometric mean speedup 4.21x. Extra R package variants are shown where they apply. Median elapsed time is used for the headline comparison across seven measured runs per implementation.</p>
       </div>
       <div class="stamp">
         <div><span>Tasks</span><strong>5</strong></div>
-        <div><span>Iterations</span><strong>7</strong></div>
-        <div><span>Generated</span><strong>17:46</strong></div>
+        <div><span>Implementations</span><strong>4</strong></div>
+        <div><span>Generated</span><strong>17:59</strong></div>
       </div>
     </div>
     <aside class="scoreboard" aria-label="Benchmark highlights">
       <div>
-        <div class="metric"><span>Geomean speedup</span><strong>4.09x</strong></div>
-        <div class="metric"><span>Largest C++ edge</span><strong>28.50x</strong></div>
-        <div class="metric text-metric"><span>Closest contest</span><strong>Matrix multiplication</strong></div>
+        <div class="metric"><span>Base R vs C++ geomean</span><strong>4.21x</strong></div>
+        <div class="metric"><span>Largest C++ edge</span><strong>29.29x</strong></div>
+        <div class="metric text-metric"><span>Fastest by task</span><strong>C++ on 3, R data.table on 1, R Matrix on 1</strong></div>
       </div>
-      <p class="score-note">Matrix multiplication is deliberately included, but it mostly measures calls into native BLAS rather than hand-written language loops.</p>
+      <p class="score-note">Matrix and data.table variants are R package comparisons, not new languages. C++ remains the native baseline.</p>
     </aside>
   </section>
 
   <section>
     <div class="section-title">
       <h2>Median Results</h2>
-      <p>Shorter bars are faster. Both implementations build deterministic data before timing; checksums force the computed results to be used.</p>
+      <p>Bars are ordered R base, R package variants, then C++. All R implementations use blue-family bars; C++ uses red.</p>
     </div>
     <div class="task-grid">
-      <article class="task-card"><div class="task-top"><div><p class="kicker">1,200 x 1,200 double matrices</p><h2>Matrix multiplication</h2></div><span class="winner cpp">C++ 1.51x faster</span></div><div class="bars" aria-label="Median timing bars for Matrix multiplication"><div class="bar-row r-bar"><span class="lang">R</span><span class="track"><i style="width:100.00%"></i></span><strong>12.0 ms</strong></div><div class="bar-row cpp-bar"><span class="lang">C++</span><span class="track"><i style="width:66.22%"></i></span><strong>7.95 ms</strong></div></div><p class="note">R uses %*%; C++ calls cblas_dgemm through Accelerate on this Mac.</p></article>
-      <article class="task-card"><div class="task-top"><div><p class="kicker">6,000,000 doubles</p><h2>Element-wise numeric transform</h2></div><span class="winner cpp">C++ 1.97x faster</span></div><div class="bars" aria-label="Median timing bars for Element-wise numeric transform"><div class="bar-row r-bar"><span class="lang">R</span><span class="track"><i style="width:100.00%"></i></span><strong>92.0 ms</strong></div><div class="bar-row cpp-bar"><span class="lang">C++</span><span class="track"><i style="width:50.63%"></i></span><strong>46.6 ms</strong></div></div><p class="note">sqrt(abs(x)) * sin(x) + cos(0.5 * x), reduced to one checksum.</p></article>
-      <article class="task-card"><div class="task-top"><div><p class="kicker">1,000,000 doubles</p><h2>Numeric sorting</h2></div><span class="winner r">R 1.86x faster</span></div><div class="bars" aria-label="Median timing bars for Numeric sorting"><div class="bar-row r-bar"><span class="lang">R</span><span class="track"><i style="width:53.69%"></i></span><strong>37.0 ms</strong></div><div class="bar-row cpp-bar"><span class="lang">C++</span><span class="track"><i style="width:100.00%"></i></span><strong>68.9 ms</strong></div></div><p class="note">R sort() uses optimized native sorting; C++ uses generic std::sort on a copied numeric vector.</p></article>
-      <article class="task-card"><div class="task-top"><div><p class="kicker">5,000,000 rows, 1,000 groups</p><h2>Group-by summation</h2></div><span class="winner cpp">C++ 25.09x faster</span></div><div class="bars" aria-label="Median timing bars for Group-by summation"><div class="bar-row r-bar"><span class="lang">R</span><span class="track"><i style="width:100.00%"></i></span><strong>54.0 ms</strong></div><div class="bar-row cpp-bar"><span class="lang">C++</span><span class="track"><i style="width:3.99%"></i></span><strong>2.15 ms</strong></div></div><p class="note">R rowsum() versus a direct C++ accumulation loop.</p></article>
-      <article class="task-card"><div class="task-top"><div><p class="kicker">250,000 delimited strings</p><h2>Text field parsing</h2></div><span class="winner cpp">C++ 28.50x faster</span></div><div class="bars" aria-label="Median timing bars for Text field parsing"><div class="bar-row r-bar"><span class="lang">R</span><span class="track"><i style="width:100.00%"></i></span><strong>120 ms</strong></div><div class="bar-row cpp-bar"><span class="lang">C++</span><span class="track"><i style="width:3.51%"></i></span><strong>4.21 ms</strong></div></div><p class="note">R regex extraction versus C++ delimiter scan and strtod.</p></article>
+      <article class="task-card"><div class="task-top"><div><p class="kicker">1,200 x 1,200 double matrices</p><h2>Matrix multiplication</h2></div><span class="winner r-matrix">Fastest: R Matrix</span></div><div class="bars" aria-label="Median timing bars for Matrix multiplication"><div class="bar-row impl-row r-base"><span class="lang">R base</span><span class="track"><i style="width:100.00%"></i></span><strong>13.0 ms</strong></div><div class="bar-row impl-row r-matrix"><span class="lang">R Matrix</span><span class="track"><i style="width:76.92%"></i></span><strong>10.0 ms</strong></div><div class="bar-row impl-row cplusplus"><span class="lang">C++</span><span class="track"><i style="width:84.34%"></i></span><strong>11.0 ms</strong></div></div><p class="comparison">C++ 1.19x faster than base R</p><p class="note">Base R matrix product, Matrix dense dgeMatrix product, and C++ cblas_dgemm. Matrix conversion happens before timing.</p></article>
+      <article class="task-card"><div class="task-top"><div><p class="kicker">6,000,000 doubles</p><h2>Element-wise numeric transform</h2></div><span class="winner cplusplus">Fastest: C++</span></div><div class="bars" aria-label="Median timing bars for Element-wise numeric transform"><div class="bar-row impl-row r-base"><span class="lang">R base</span><span class="track"><i style="width:100.00%"></i></span><strong>108 ms</strong></div><div class="bar-row impl-row cplusplus"><span class="lang">C++</span><span class="track"><i style="width:44.10%"></i></span><strong>47.6 ms</strong></div></div><p class="comparison">C++ 2.27x faster than base R</p><p class="note">sqrt(abs(x)) * sin(x) + cos(0.5 * x), reduced to one checksum.</p></article>
+      <article class="task-card"><div class="task-top"><div><p class="kicker">1,000,000 doubles</p><h2>Numeric sorting</h2></div><span class="winner r-data-table">Fastest: R data.table</span></div><div class="bars" aria-label="Median timing bars for Numeric sorting"><div class="bar-row impl-row r-base"><span class="lang">R base</span><span class="track"><i style="width:58.31%"></i></span><strong>40.0 ms</strong></div><div class="bar-row impl-row r-data-table"><span class="lang">R data.table</span><span class="track"><i style="width:42.27%"></i></span><strong>29.0 ms</strong></div><div class="bar-row impl-row cplusplus"><span class="lang">C++</span><span class="track"><i style="width:100.00%"></i></span><strong>68.6 ms</strong></div></div><p class="comparison">Base R 1.71x faster than C++</p><p class="note">Base R sort(), data.table setorder() on a copied table, and C++ std::sort.</p></article>
+      <article class="task-card"><div class="task-top"><div><p class="kicker">5,000,000 rows, 1,000 groups</p><h2>Group-by summation</h2></div><span class="winner cplusplus">Fastest: C++</span></div><div class="bars" aria-label="Median timing bars for Group-by summation"><div class="bar-row impl-row r-base"><span class="lang">R base</span><span class="track"><i style="width:100.00%"></i></span><strong>64.0 ms</strong></div><div class="bar-row impl-row r-data-table"><span class="lang">R data.table</span><span class="track"><i style="width:84.38%"></i></span><strong>54.0 ms</strong></div><div class="bar-row impl-row cplusplus"><span class="lang">C++</span><span class="track"><i style="width:3.41%"></i></span><strong>2.19 ms</strong></div></div><p class="comparison">C++ 29.29x faster than base R</p><p class="note">Base R rowsum(), data.table grouped sum, and a direct C++ accumulation loop.</p></article>
+      <article class="task-card"><div class="task-top"><div><p class="kicker">250,000 delimited strings</p><h2>Text field parsing</h2></div><span class="winner cplusplus">Fastest: C++</span></div><div class="bars" aria-label="Median timing bars for Text field parsing"><div class="bar-row impl-row r-base"><span class="lang">R base</span><span class="track"><i style="width:100.00%"></i></span><strong>119 ms</strong></div><div class="bar-row impl-row cplusplus"><span class="lang">C++</span><span class="track"><i style="width:3.48%"></i></span><strong>4.14 ms</strong></div></div><p class="comparison">C++ 28.77x faster than base R</p><p class="note">Base R regex extraction versus C++ delimiter scan and strtod.</p></article>
     </div>
   </section>
 
@@ -397,19 +417,22 @@ pre {
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>Task</th><th>Language</th><th>Median</th><th>Mean</th><th>Std. dev.</th><th>Speedup</th></tr>
+          <tr><th>Task</th><th>Implementation</th><th>Median</th><th>Mean</th><th>Std. dev.</th><th>Base R / C++</th></tr>
         </thead>
         <tbody>
-          <tr><td>Matrix multiplication</td><td>R</td><td>12.0 ms</td><td>12.0 ms</td><td>1.63 ms</td><td rowspan="2">1.51x C++</td></tr>
-          <tr><td>Matrix multiplication</td><td>C++</td><td>7.95 ms</td><td>8.10 ms</td><td>0.40 ms</td></tr>
-          <tr><td>Element-wise numeric transform</td><td>R</td><td>92.0 ms</td><td>93.4 ms</td><td>7.21 ms</td><td rowspan="2">1.97x C++</td></tr>
-          <tr><td>Element-wise numeric transform</td><td>C++</td><td>46.6 ms</td><td>46.6 ms</td><td>0.32 ms</td></tr>
-          <tr><td>Numeric sorting</td><td>R</td><td>37.0 ms</td><td>36.7 ms</td><td>1.25 ms</td><td rowspan="2">1.86x R</td></tr>
-          <tr><td>Numeric sorting</td><td>C++</td><td>68.9 ms</td><td>68.9 ms</td><td>0.27 ms</td></tr>
-          <tr><td>Group-by summation</td><td>R</td><td>54.0 ms</td><td>51.9 ms</td><td>5.27 ms</td><td rowspan="2">25.09x C++</td></tr>
-          <tr><td>Group-by summation</td><td>C++</td><td>2.15 ms</td><td>2.15 ms</td><td>0.02 ms</td></tr>
-          <tr><td>Text field parsing</td><td>R</td><td>120 ms</td><td>122 ms</td><td>5.21 ms</td><td rowspan="2">28.50x C++</td></tr>
-          <tr><td>Text field parsing</td><td>C++</td><td>4.21 ms</td><td>4.18 ms</td><td>0.06 ms</td></tr>
+          <tr><td>Matrix multiplication</td><td><span class="impl-chip r-base">R base</span></td><td>13.0 ms</td><td>13.4 ms</td><td>1.81 ms</td><td>C++ 1.19x faster than base R</td></tr>
+          <tr><td>Matrix multiplication</td><td><span class="impl-chip r-matrix">R Matrix</span></td><td>10.0 ms</td><td>10.3 ms</td><td>0.95 ms</td><td></td></tr>
+          <tr><td>Matrix multiplication</td><td><span class="impl-chip cplusplus">C++</span></td><td>11.0 ms</td><td>10.9 ms</td><td>1.61 ms</td><td></td></tr>
+          <tr><td>Element-wise numeric transform</td><td><span class="impl-chip r-base">R base</span></td><td>108 ms</td><td>114 ms</td><td>21.1 ms</td><td>C++ 2.27x faster than base R</td></tr>
+          <tr><td>Element-wise numeric transform</td><td><span class="impl-chip cplusplus">C++</span></td><td>47.6 ms</td><td>47.3 ms</td><td>0.87 ms</td><td></td></tr>
+          <tr><td>Numeric sorting</td><td><span class="impl-chip r-base">R base</span></td><td>40.0 ms</td><td>40.4 ms</td><td>2.51 ms</td><td>Base R 1.71x faster than C++</td></tr>
+          <tr><td>Numeric sorting</td><td><span class="impl-chip r-data-table">R data.table</span></td><td>29.0 ms</td><td>29.3 ms</td><td>1.50 ms</td><td></td></tr>
+          <tr><td>Numeric sorting</td><td><span class="impl-chip cplusplus">C++</span></td><td>68.6 ms</td><td>68.7 ms</td><td>0.74 ms</td><td></td></tr>
+          <tr><td>Group-by summation</td><td><span class="impl-chip r-base">R base</span></td><td>64.0 ms</td><td>59.7 ms</td><td>6.80 ms</td><td>C++ 29.29x faster than base R</td></tr>
+          <tr><td>Group-by summation</td><td><span class="impl-chip r-data-table">R data.table</span></td><td>54.0 ms</td><td>54.7 ms</td><td>5.28 ms</td><td></td></tr>
+          <tr><td>Group-by summation</td><td><span class="impl-chip cplusplus">C++</span></td><td>2.19 ms</td><td>2.23 ms</td><td>0.08 ms</td><td></td></tr>
+          <tr><td>Text field parsing</td><td><span class="impl-chip r-base">R base</span></td><td>119 ms</td><td>123 ms</td><td>12.8 ms</td><td>C++ 28.77x faster than base R</td></tr>
+          <tr><td>Text field parsing</td><td><span class="impl-chip cplusplus">C++</span></td><td>4.14 ms</td><td>4.15 ms</td><td>0.06 ms</td><td></td></tr>
         </tbody>
       </table>
     </div>
@@ -418,98 +441,121 @@ pre {
   <section>
     <div class="section-title">
       <h2>Method</h2>
-      <p>This is a practical local benchmark, not a universal claim about either language.</p>
+      <p>This is a practical local benchmark, not a universal claim about any package or language.</p>
     </div>
     <div class="method">
       <div class="method-box">
         <h3>How to rerun</h3>
         <p>From this directory, run <code>./run_benchmarks.sh</code>. Set <code>BENCH_ITERATIONS=12</code> to collect more repetitions.</p>
-        <p>The runner compiles C++ with <code>-O3 -std=c++17 -DNDEBUG</code>, executes both benchmark programs, writes <code>results/timings.csv</code>, and rebuilds this report.</p>
+        <p><code>Matrix</code> is used for dense matrix multiplication when installed. <code>data.table</code> is used for sorting and group-by variants when installed.</p>
       </div>
       <div class="method-box">
         <h3>Environment</h3>
         <div class="meta-list">
           <div><span>CPU</span><strong>Apple M1 Pro</strong></div>
           <div><span>R</span><strong>R version 4.5.2 (2025-10-31)</strong></div>
+          <div><span>Matrix</span><strong>1.7.4</strong></div>
+          <div><span>data.table</span><strong>1.18.2.1 / threads 4</strong></div>
           <div><span>BLAS</span><strong>/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib</strong></div>
           <div><span>Compiler</span><strong>Apple clang version 17.0.0 (clang-1700.3.19.1)</strong></div>
-          <div><span>Timestamp</span><strong>2026-06-10 17:46:00 CEST</strong></div>
+          <div><span>Timestamp</span><strong>2026-06-10 17:59:01 CEST</strong></div>
         </div>
       </div>
     </div>
     <details>
       <summary>Embedded raw CSV</summary>
-      <pre>language,task_id,task_name,iteration,elapsed_ms,checksum
-R,matrix_multiply,&quot;Matrix multiplication&quot;,1,9.000000000000,-524335.137767753447
-R,matrix_multiply,&quot;Matrix multiplication&quot;,2,11.000000000000,-524335.137767753447
-R,matrix_multiply,&quot;Matrix multiplication&quot;,3,12.000000000000,-524335.137767753447
-R,matrix_multiply,&quot;Matrix multiplication&quot;,4,14.000000000000,-524335.137767753447
-R,matrix_multiply,&quot;Matrix multiplication&quot;,5,13.000000000000,-524335.137767753447
-R,matrix_multiply,&quot;Matrix multiplication&quot;,6,13.000000000000,-524335.137767753447
-R,matrix_multiply,&quot;Matrix multiplication&quot;,7,12.000000000000,-524335.137767753447
-R,numeric_transform,&quot;Element-wise numeric transform&quot;,1,85.000000000000,334702.664900351025
-R,numeric_transform,&quot;Element-wise numeric transform&quot;,2,92.000000000000,334702.664900351025
-R,numeric_transform,&quot;Element-wise numeric transform&quot;,3,90.000000000000,334702.664900351025
-R,numeric_transform,&quot;Element-wise numeric transform&quot;,4,98.000000000000,334702.664900351025
-R,numeric_transform,&quot;Element-wise numeric transform&quot;,5,106.000000000000,334702.664900351025
-R,numeric_transform,&quot;Element-wise numeric transform&quot;,6,96.000000000000,334702.664900351025
-R,numeric_transform,&quot;Element-wise numeric transform&quot;,7,87.000000000000,334702.664900351025
-R,sorting,&quot;Numeric sorting&quot;,1,39.000000000000,1.499330694589
-R,sorting,&quot;Numeric sorting&quot;,2,37.000000000000,1.499330694589
-R,sorting,&quot;Numeric sorting&quot;,3,36.000000000000,1.499330694589
-R,sorting,&quot;Numeric sorting&quot;,4,35.000000000000,1.499330694589
-R,sorting,&quot;Numeric sorting&quot;,5,37.000000000000,1.499330694589
-R,sorting,&quot;Numeric sorting&quot;,6,36.000000000000,1.499330694589
-R,sorting,&quot;Numeric sorting&quot;,7,37.000000000000,1.499330694589
-R,group_sum,&quot;Group-by summation&quot;,1,47.000000000000,2502601.286957268603
-R,group_sum,&quot;Group-by summation&quot;,2,60.000000000000,2502601.286957268603
-R,group_sum,&quot;Group-by summation&quot;,3,46.000000000000,2502601.286957268603
-R,group_sum,&quot;Group-by summation&quot;,4,54.000000000000,2502601.286957268603
-R,group_sum,&quot;Group-by summation&quot;,5,55.000000000000,2502601.286957268603
-R,group_sum,&quot;Group-by summation&quot;,6,47.000000000000,2502601.286957268603
-R,group_sum,&quot;Group-by summation&quot;,7,54.000000000000,2502601.286957268603
-R,text_parse,&quot;Text field parsing&quot;,1,133.000000000000,124661250.000000000000
-R,text_parse,&quot;Text field parsing&quot;,2,120.000000000000,124661250.000000000000
-R,text_parse,&quot;Text field parsing&quot;,3,118.000000000000,124661250.000000000000
-R,text_parse,&quot;Text field parsing&quot;,4,123.000000000000,124661250.000000000000
-R,text_parse,&quot;Text field parsing&quot;,5,121.000000000000,124661250.000000000000
-R,text_parse,&quot;Text field parsing&quot;,6,120.000000000000,124661250.000000000000
-R,text_parse,&quot;Text field parsing&quot;,7,118.000000000000,124661250.000000000000
-C++,matrix_multiply,&quot;Matrix multiplication&quot;,1,7.865750000000,-524335.137767754029
-C++,matrix_multiply,&quot;Matrix multiplication&quot;,2,7.660541000000,-524335.137767754029
-C++,matrix_multiply,&quot;Matrix multiplication&quot;,3,8.444417000000,-524335.137767754029
-C++,matrix_multiply,&quot;Matrix multiplication&quot;,4,7.946166000000,-524335.137767754029
-C++,matrix_multiply,&quot;Matrix multiplication&quot;,5,8.813167000000,-524335.137767754029
-C++,matrix_multiply,&quot;Matrix multiplication&quot;,6,7.892125000000,-524335.137767754029
-C++,matrix_multiply,&quot;Matrix multiplication&quot;,7,8.050375000000,-524335.137767754029
-C++,numeric_transform,&quot;Element-wise numeric transform&quot;,1,46.725125000000,334702.664900351141
-C++,numeric_transform,&quot;Element-wise numeric transform&quot;,2,46.370208000000,334702.664900351141
-C++,numeric_transform,&quot;Element-wise numeric transform&quot;,3,46.582334000000,334702.664900351141
-C++,numeric_transform,&quot;Element-wise numeric transform&quot;,4,46.295625000000,334702.664900351141
-C++,numeric_transform,&quot;Element-wise numeric transform&quot;,5,47.164708000000,334702.664900351141
-C++,numeric_transform,&quot;Element-wise numeric transform&quot;,6,46.587792000000,334702.664900351141
-C++,numeric_transform,&quot;Element-wise numeric transform&quot;,7,46.217958000000,334702.664900351141
-C++,sorting,&quot;Numeric sorting&quot;,1,68.422875000000,1.499331194278
-C++,sorting,&quot;Numeric sorting&quot;,2,68.915000000000,1.499331194278
-C++,sorting,&quot;Numeric sorting&quot;,3,68.948208000000,1.499331194278
-C++,sorting,&quot;Numeric sorting&quot;,4,68.855750000000,1.499331194278
-C++,sorting,&quot;Numeric sorting&quot;,5,68.822667000000,1.499331194278
-C++,sorting,&quot;Numeric sorting&quot;,6,69.142500000000,1.499331194278
-C++,sorting,&quot;Numeric sorting&quot;,7,69.256667000000,1.499331194278
-C++,group_sum,&quot;Group-by summation&quot;,1,2.106334000000,2502601.286957268603
-C++,group_sum,&quot;Group-by summation&quot;,2,2.152084000000,2502601.286957268603
-C++,group_sum,&quot;Group-by summation&quot;,3,2.151166000000,2502601.286957268603
-C++,group_sum,&quot;Group-by summation&quot;,4,2.150000000000,2502601.286957268603
-C++,group_sum,&quot;Group-by summation&quot;,5,2.156500000000,2502601.286957268603
-C++,group_sum,&quot;Group-by summation&quot;,6,2.152292000000,2502601.286957268603
-C++,group_sum,&quot;Group-by summation&quot;,7,2.176416000000,2502601.286957268603
-C++,text_parse,&quot;Text field parsing&quot;,1,4.080375000000,124661250.000000000000
-C++,text_parse,&quot;Text field parsing&quot;,2,4.216875000000,124661250.000000000000
-C++,text_parse,&quot;Text field parsing&quot;,3,4.196167000000,124661250.000000000000
-C++,text_parse,&quot;Text field parsing&quot;,4,4.210709000000,124661250.000000000000
-C++,text_parse,&quot;Text field parsing&quot;,5,4.222333000000,124661250.000000000000
-C++,text_parse,&quot;Text field parsing&quot;,6,4.097333000000,124661250.000000000000
-C++,text_parse,&quot;Text field parsing&quot;,7,4.238334000000,124661250.000000000000</pre>
+      <pre>implementation,task_id,task_name,iteration,elapsed_ms,checksum
+R base,matrix_multiply,&quot;Matrix multiplication&quot;,1,13.000000000000,-524335.137767753447
+R base,matrix_multiply,&quot;Matrix multiplication&quot;,2,13.000000000000,-524335.137767753447
+R base,matrix_multiply,&quot;Matrix multiplication&quot;,3,14.000000000000,-524335.137767753447
+R base,matrix_multiply,&quot;Matrix multiplication&quot;,4,13.000000000000,-524335.137767753447
+R base,matrix_multiply,&quot;Matrix multiplication&quot;,5,13.000000000000,-524335.137767753447
+R base,matrix_multiply,&quot;Matrix multiplication&quot;,6,17.000000000000,-524335.137767753447
+R base,matrix_multiply,&quot;Matrix multiplication&quot;,7,11.000000000000,-524335.137767753447
+R Matrix,matrix_multiply,&quot;Matrix multiplication&quot;,1,10.000000000000,-524335.137767753447
+R Matrix,matrix_multiply,&quot;Matrix multiplication&quot;,2,9.000000000000,-524335.137767753447
+R Matrix,matrix_multiply,&quot;Matrix multiplication&quot;,3,10.000000000000,-524335.137767753447
+R Matrix,matrix_multiply,&quot;Matrix multiplication&quot;,4,11.000000000000,-524335.137767753447
+R Matrix,matrix_multiply,&quot;Matrix multiplication&quot;,5,10.000000000000,-524335.137767753447
+R Matrix,matrix_multiply,&quot;Matrix multiplication&quot;,6,10.000000000000,-524335.137767753447
+R Matrix,matrix_multiply,&quot;Matrix multiplication&quot;,7,12.000000000000,-524335.137767753447
+R base,numeric_transform,&quot;Element-wise numeric transform&quot;,1,106.000000000000,334702.664900351025
+R base,numeric_transform,&quot;Element-wise numeric transform&quot;,2,128.000000000000,334702.664900351025
+R base,numeric_transform,&quot;Element-wise numeric transform&quot;,3,108.000000000000,334702.664900351025
+R base,numeric_transform,&quot;Element-wise numeric transform&quot;,4,108.000000000000,334702.664900351025
+R base,numeric_transform,&quot;Element-wise numeric transform&quot;,5,97.000000000000,334702.664900351025
+R base,numeric_transform,&quot;Element-wise numeric transform&quot;,6,97.000000000000,334702.664900351025
+R base,numeric_transform,&quot;Element-wise numeric transform&quot;,7,156.000000000000,334702.664900351025
+R base,sorting,&quot;Numeric sorting&quot;,1,42.000000000000,1.499330694589
+R base,sorting,&quot;Numeric sorting&quot;,2,45.000000000000,1.499330694589
+R base,sorting,&quot;Numeric sorting&quot;,3,38.000000000000,1.499330694589
+R base,sorting,&quot;Numeric sorting&quot;,4,39.000000000000,1.499330694589
+R base,sorting,&quot;Numeric sorting&quot;,5,40.000000000000,1.499330694589
+R base,sorting,&quot;Numeric sorting&quot;,6,38.000000000000,1.499330694589
+R base,sorting,&quot;Numeric sorting&quot;,7,41.000000000000,1.499330694589
+R data.table,sorting,&quot;Numeric sorting&quot;,1,30.000000000000,1.499330694589
+R data.table,sorting,&quot;Numeric sorting&quot;,2,29.000000000000,1.499330694589
+R data.table,sorting,&quot;Numeric sorting&quot;,3,31.000000000000,1.499330694589
+R data.table,sorting,&quot;Numeric sorting&quot;,4,28.000000000000,1.499330694589
+R data.table,sorting,&quot;Numeric sorting&quot;,5,27.000000000000,1.499330694589
+R data.table,sorting,&quot;Numeric sorting&quot;,6,29.000000000000,1.499330694589
+R data.table,sorting,&quot;Numeric sorting&quot;,7,31.000000000000,1.499330694589
+R base,group_sum,&quot;Group-by summation&quot;,1,54.000000000000,2502601.286957268603
+R base,group_sum,&quot;Group-by summation&quot;,2,64.000000000000,2502601.286957268603
+R base,group_sum,&quot;Group-by summation&quot;,3,68.000000000000,2502601.286957268603
+R base,group_sum,&quot;Group-by summation&quot;,4,64.000000000000,2502601.286957268603
+R base,group_sum,&quot;Group-by summation&quot;,5,51.000000000000,2502601.286957268603
+R base,group_sum,&quot;Group-by summation&quot;,6,53.000000000000,2502601.286957268603
+R base,group_sum,&quot;Group-by summation&quot;,7,64.000000000000,2502601.286957268603
+R data.table,group_sum,&quot;Group-by summation&quot;,1,49.000000000000,2502601.286957268603
+R data.table,group_sum,&quot;Group-by summation&quot;,2,54.000000000000,2502601.286957268603
+R data.table,group_sum,&quot;Group-by summation&quot;,3,62.000000000000,2502601.286957268603
+R data.table,group_sum,&quot;Group-by summation&quot;,4,50.000000000000,2502601.286957268603
+R data.table,group_sum,&quot;Group-by summation&quot;,5,59.000000000000,2502601.286957268603
+R data.table,group_sum,&quot;Group-by summation&quot;,6,50.000000000000,2502601.286957268603
+R data.table,group_sum,&quot;Group-by summation&quot;,7,59.000000000000,2502601.286957268603
+R base,text_parse,&quot;Text field parsing&quot;,1,152.000000000000,124661250.000000000000
+R base,text_parse,&quot;Text field parsing&quot;,2,116.000000000000,124661250.000000000000
+R base,text_parse,&quot;Text field parsing&quot;,3,117.000000000000,124661250.000000000000
+R base,text_parse,&quot;Text field parsing&quot;,4,118.000000000000,124661250.000000000000
+R base,text_parse,&quot;Text field parsing&quot;,5,119.000000000000,124661250.000000000000
+R base,text_parse,&quot;Text field parsing&quot;,6,121.000000000000,124661250.000000000000
+R base,text_parse,&quot;Text field parsing&quot;,7,119.000000000000,124661250.000000000000
+C++,matrix_multiply,&quot;Matrix multiplication&quot;,1,7.929208000000,-524335.137767754029
+C++,matrix_multiply,&quot;Matrix multiplication&quot;,2,13.116375000000,-524335.137767754029
+C++,matrix_multiply,&quot;Matrix multiplication&quot;,3,11.805875000000,-524335.137767754029
+C++,matrix_multiply,&quot;Matrix multiplication&quot;,4,10.375792000000,-524335.137767754029
+C++,matrix_multiply,&quot;Matrix multiplication&quot;,5,10.964000000000,-524335.137767754029
+C++,matrix_multiply,&quot;Matrix multiplication&quot;,6,10.258708000000,-524335.137767754029
+C++,matrix_multiply,&quot;Matrix multiplication&quot;,7,11.540375000000,-524335.137767754029
+C++,numeric_transform,&quot;Element-wise numeric transform&quot;,1,47.990375000000,334702.664900351141
+C++,numeric_transform,&quot;Element-wise numeric transform&quot;,2,46.628250000000,334702.664900351141
+C++,numeric_transform,&quot;Element-wise numeric transform&quot;,3,46.174666000000,334702.664900351141
+C++,numeric_transform,&quot;Element-wise numeric transform&quot;,4,46.479375000000,334702.664900351141
+C++,numeric_transform,&quot;Element-wise numeric transform&quot;,5,48.221750000000,334702.664900351141
+C++,numeric_transform,&quot;Element-wise numeric transform&quot;,6,48.169041000000,334702.664900351141
+C++,numeric_transform,&quot;Element-wise numeric transform&quot;,7,47.629334000000,334702.664900351141
+C++,sorting,&quot;Numeric sorting&quot;,1,68.896375000000,1.499331194278
+C++,sorting,&quot;Numeric sorting&quot;,2,68.599458000000,1.499331194278
+C++,sorting,&quot;Numeric sorting&quot;,3,70.147041000000,1.499331194278
+C++,sorting,&quot;Numeric sorting&quot;,4,69.025416000000,1.499331194278
+C++,sorting,&quot;Numeric sorting&quot;,5,68.230000000000,1.499331194278
+C++,sorting,&quot;Numeric sorting&quot;,6,68.096959000000,1.499331194278
+C++,sorting,&quot;Numeric sorting&quot;,7,68.011917000000,1.499331194278
+C++,group_sum,&quot;Group-by summation&quot;,1,2.177416000000,2502601.286957268603
+C++,group_sum,&quot;Group-by summation&quot;,2,2.319917000000,2502601.286957268603
+C++,group_sum,&quot;Group-by summation&quot;,3,2.364709000000,2502601.286957268603
+C++,group_sum,&quot;Group-by summation&quot;,4,2.185125000000,2502601.286957268603
+C++,group_sum,&quot;Group-by summation&quot;,5,2.199333000000,2502601.286957268603
+C++,group_sum,&quot;Group-by summation&quot;,6,2.169667000000,2502601.286957268603
+C++,group_sum,&quot;Group-by summation&quot;,7,2.180584000000,2502601.286957268603
+C++,text_parse,&quot;Text field parsing&quot;,1,4.217167000000,124661250.000000000000
+C++,text_parse,&quot;Text field parsing&quot;,2,4.205042000000,124661250.000000000000
+C++,text_parse,&quot;Text field parsing&quot;,3,4.187333000000,124661250.000000000000
+C++,text_parse,&quot;Text field parsing&quot;,4,4.086042000000,124661250.000000000000
+C++,text_parse,&quot;Text field parsing&quot;,5,4.136083000000,124661250.000000000000
+C++,text_parse,&quot;Text field parsing&quot;,6,4.092875000000,124661250.000000000000
+C++,text_parse,&quot;Text field parsing&quot;,7,4.093750000000,124661250.000000000000</pre>
     </details>
   </section>
 </main>

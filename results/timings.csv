@@ -1,71 +1,92 @@
-language,task_id,task_name,iteration,elapsed_ms,checksum
-R,matrix_multiply,"Matrix multiplication",1,9.000000000000,-524335.137767753447
-R,matrix_multiply,"Matrix multiplication",2,11.000000000000,-524335.137767753447
-R,matrix_multiply,"Matrix multiplication",3,12.000000000000,-524335.137767753447
-R,matrix_multiply,"Matrix multiplication",4,14.000000000000,-524335.137767753447
-R,matrix_multiply,"Matrix multiplication",5,13.000000000000,-524335.137767753447
-R,matrix_multiply,"Matrix multiplication",6,13.000000000000,-524335.137767753447
-R,matrix_multiply,"Matrix multiplication",7,12.000000000000,-524335.137767753447
-R,numeric_transform,"Element-wise numeric transform",1,85.000000000000,334702.664900351025
-R,numeric_transform,"Element-wise numeric transform",2,92.000000000000,334702.664900351025
-R,numeric_transform,"Element-wise numeric transform",3,90.000000000000,334702.664900351025
-R,numeric_transform,"Element-wise numeric transform",4,98.000000000000,334702.664900351025
-R,numeric_transform,"Element-wise numeric transform",5,106.000000000000,334702.664900351025
-R,numeric_transform,"Element-wise numeric transform",6,96.000000000000,334702.664900351025
-R,numeric_transform,"Element-wise numeric transform",7,87.000000000000,334702.664900351025
-R,sorting,"Numeric sorting",1,39.000000000000,1.499330694589
-R,sorting,"Numeric sorting",2,37.000000000000,1.499330694589
-R,sorting,"Numeric sorting",3,36.000000000000,1.499330694589
-R,sorting,"Numeric sorting",4,35.000000000000,1.499330694589
-R,sorting,"Numeric sorting",5,37.000000000000,1.499330694589
-R,sorting,"Numeric sorting",6,36.000000000000,1.499330694589
-R,sorting,"Numeric sorting",7,37.000000000000,1.499330694589
-R,group_sum,"Group-by summation",1,47.000000000000,2502601.286957268603
-R,group_sum,"Group-by summation",2,60.000000000000,2502601.286957268603
-R,group_sum,"Group-by summation",3,46.000000000000,2502601.286957268603
-R,group_sum,"Group-by summation",4,54.000000000000,2502601.286957268603
-R,group_sum,"Group-by summation",5,55.000000000000,2502601.286957268603
-R,group_sum,"Group-by summation",6,47.000000000000,2502601.286957268603
-R,group_sum,"Group-by summation",7,54.000000000000,2502601.286957268603
-R,text_parse,"Text field parsing",1,133.000000000000,124661250.000000000000
-R,text_parse,"Text field parsing",2,120.000000000000,124661250.000000000000
-R,text_parse,"Text field parsing",3,118.000000000000,124661250.000000000000
-R,text_parse,"Text field parsing",4,123.000000000000,124661250.000000000000
-R,text_parse,"Text field parsing",5,121.000000000000,124661250.000000000000
-R,text_parse,"Text field parsing",6,120.000000000000,124661250.000000000000
-R,text_parse,"Text field parsing",7,118.000000000000,124661250.000000000000
-C++,matrix_multiply,"Matrix multiplication",1,7.865750000000,-524335.137767754029
-C++,matrix_multiply,"Matrix multiplication",2,7.660541000000,-524335.137767754029
-C++,matrix_multiply,"Matrix multiplication",3,8.444417000000,-524335.137767754029
-C++,matrix_multiply,"Matrix multiplication",4,7.946166000000,-524335.137767754029
-C++,matrix_multiply,"Matrix multiplication",5,8.813167000000,-524335.137767754029
-C++,matrix_multiply,"Matrix multiplication",6,7.892125000000,-524335.137767754029
-C++,matrix_multiply,"Matrix multiplication",7,8.050375000000,-524335.137767754029
-C++,numeric_transform,"Element-wise numeric transform",1,46.725125000000,334702.664900351141
-C++,numeric_transform,"Element-wise numeric transform",2,46.370208000000,334702.664900351141
-C++,numeric_transform,"Element-wise numeric transform",3,46.582334000000,334702.664900351141
-C++,numeric_transform,"Element-wise numeric transform",4,46.295625000000,334702.664900351141
-C++,numeric_transform,"Element-wise numeric transform",5,47.164708000000,334702.664900351141
-C++,numeric_transform,"Element-wise numeric transform",6,46.587792000000,334702.664900351141
-C++,numeric_transform,"Element-wise numeric transform",7,46.217958000000,334702.664900351141
-C++,sorting,"Numeric sorting",1,68.422875000000,1.499331194278
-C++,sorting,"Numeric sorting",2,68.915000000000,1.499331194278
-C++,sorting,"Numeric sorting",3,68.948208000000,1.499331194278
-C++,sorting,"Numeric sorting",4,68.855750000000,1.499331194278
-C++,sorting,"Numeric sorting",5,68.822667000000,1.499331194278
-C++,sorting,"Numeric sorting",6,69.142500000000,1.499331194278
-C++,sorting,"Numeric sorting",7,69.256667000000,1.499331194278
-C++,group_sum,"Group-by summation",1,2.106334000000,2502601.286957268603
-C++,group_sum,"Group-by summation",2,2.152084000000,2502601.286957268603
-C++,group_sum,"Group-by summation",3,2.151166000000,2502601.286957268603
-C++,group_sum,"Group-by summation",4,2.150000000000,2502601.286957268603
-C++,group_sum,"Group-by summation",5,2.156500000000,2502601.286957268603
-C++,group_sum,"Group-by summation",6,2.152292000000,2502601.286957268603
-C++,group_sum,"Group-by summation",7,2.176416000000,2502601.286957268603
-C++,text_parse,"Text field parsing",1,4.080375000000,124661250.000000000000
-C++,text_parse,"Text field parsing",2,4.216875000000,124661250.000000000000
-C++,text_parse,"Text field parsing",3,4.196167000000,124661250.000000000000
-C++,text_parse,"Text field parsing",4,4.210709000000,124661250.000000000000
-C++,text_parse,"Text field parsing",5,4.222333000000,124661250.000000000000
-C++,text_parse,"Text field parsing",6,4.097333000000,124661250.000000000000
-C++,text_parse,"Text field parsing",7,4.238334000000,124661250.000000000000
+implementation,task_id,task_name,iteration,elapsed_ms,checksum
+R base,matrix_multiply,"Matrix multiplication",1,13.000000000000,-524335.137767753447
+R base,matrix_multiply,"Matrix multiplication",2,13.000000000000,-524335.137767753447
+R base,matrix_multiply,"Matrix multiplication",3,14.000000000000,-524335.137767753447
+R base,matrix_multiply,"Matrix multiplication",4,13.000000000000,-524335.137767753447
+R base,matrix_multiply,"Matrix multiplication",5,13.000000000000,-524335.137767753447
+R base,matrix_multiply,"Matrix multiplication",6,17.000000000000,-524335.137767753447
+R base,matrix_multiply,"Matrix multiplication",7,11.000000000000,-524335.137767753447
+R Matrix,matrix_multiply,"Matrix multiplication",1,10.000000000000,-524335.137767753447
+R Matrix,matrix_multiply,"Matrix multiplication",2,9.000000000000,-524335.137767753447
+R Matrix,matrix_multiply,"Matrix multiplication",3,10.000000000000,-524335.137767753447
+R Matrix,matrix_multiply,"Matrix multiplication",4,11.000000000000,-524335.137767753447
+R Matrix,matrix_multiply,"Matrix multiplication",5,10.000000000000,-524335.137767753447
+R Matrix,matrix_multiply,"Matrix multiplication",6,10.000000000000,-524335.137767753447
+R Matrix,matrix_multiply,"Matrix multiplication",7,12.000000000000,-524335.137767753447
+R base,numeric_transform,"Element-wise numeric transform",1,106.000000000000,334702.664900351025
+R base,numeric_transform,"Element-wise numeric transform",2,128.000000000000,334702.664900351025
+R base,numeric_transform,"Element-wise numeric transform",3,108.000000000000,334702.664900351025
+R base,numeric_transform,"Element-wise numeric transform",4,108.000000000000,334702.664900351025
+R base,numeric_transform,"Element-wise numeric transform",5,97.000000000000,334702.664900351025
+R base,numeric_transform,"Element-wise numeric transform",6,97.000000000000,334702.664900351025
+R base,numeric_transform,"Element-wise numeric transform",7,156.000000000000,334702.664900351025
+R base,sorting,"Numeric sorting",1,42.000000000000,1.499330694589
+R base,sorting,"Numeric sorting",2,45.000000000000,1.499330694589
+R base,sorting,"Numeric sorting",3,38.000000000000,1.499330694589
+R base,sorting,"Numeric sorting",4,39.000000000000,1.499330694589
+R base,sorting,"Numeric sorting",5,40.000000000000,1.499330694589
+R base,sorting,"Numeric sorting",6,38.000000000000,1.499330694589
+R base,sorting,"Numeric sorting",7,41.000000000000,1.499330694589
+R data.table,sorting,"Numeric sorting",1,30.000000000000,1.499330694589
+R data.table,sorting,"Numeric sorting",2,29.000000000000,1.499330694589
+R data.table,sorting,"Numeric sorting",3,31.000000000000,1.499330694589
+R data.table,sorting,"Numeric sorting",4,28.000000000000,1.499330694589
+R data.table,sorting,"Numeric sorting",5,27.000000000000,1.499330694589
+R data.table,sorting,"Numeric sorting",6,29.000000000000,1.499330694589
+R data.table,sorting,"Numeric sorting",7,31.000000000000,1.499330694589
+R base,group_sum,"Group-by summation",1,54.000000000000,2502601.286957268603
+R base,group_sum,"Group-by summation",2,64.000000000000,2502601.286957268603
+R base,group_sum,"Group-by summation",3,68.000000000000,2502601.286957268603
+R base,group_sum,"Group-by summation",4,64.000000000000,2502601.286957268603
+R base,group_sum,"Group-by summation",5,51.000000000000,2502601.286957268603
+R base,group_sum,"Group-by summation",6,53.000000000000,2502601.286957268603
+R base,group_sum,"Group-by summation",7,64.000000000000,2502601.286957268603
+R data.table,group_sum,"Group-by summation",1,49.000000000000,2502601.286957268603
+R data.table,group_sum,"Group-by summation",2,54.000000000000,2502601.286957268603
+R data.table,group_sum,"Group-by summation",3,62.000000000000,2502601.286957268603
+R data.table,group_sum,"Group-by summation",4,50.000000000000,2502601.286957268603
+R data.table,group_sum,"Group-by summation",5,59.000000000000,2502601.286957268603
+R data.table,group_sum,"Group-by summation",6,50.000000000000,2502601.286957268603
+R data.table,group_sum,"Group-by summation",7,59.000000000000,2502601.286957268603
+R base,text_parse,"Text field parsing",1,152.000000000000,124661250.000000000000
+R base,text_parse,"Text field parsing",2,116.000000000000,124661250.000000000000
+R base,text_parse,"Text field parsing",3,117.000000000000,124661250.000000000000
+R base,text_parse,"Text field parsing",4,118.000000000000,124661250.000000000000
+R base,text_parse,"Text field parsing",5,119.000000000000,124661250.000000000000
+R base,text_parse,"Text field parsing",6,121.000000000000,124661250.000000000000
+R base,text_parse,"Text field parsing",7,119.000000000000,124661250.000000000000
+C++,matrix_multiply,"Matrix multiplication",1,7.929208000000,-524335.137767754029
+C++,matrix_multiply,"Matrix multiplication",2,13.116375000000,-524335.137767754029
+C++,matrix_multiply,"Matrix multiplication",3,11.805875000000,-524335.137767754029
+C++,matrix_multiply,"Matrix multiplication",4,10.375792000000,-524335.137767754029
+C++,matrix_multiply,"Matrix multiplication",5,10.964000000000,-524335.137767754029
+C++,matrix_multiply,"Matrix multiplication",6,10.258708000000,-524335.137767754029
+C++,matrix_multiply,"Matrix multiplication",7,11.540375000000,-524335.137767754029
+C++,numeric_transform,"Element-wise numeric transform",1,47.990375000000,334702.664900351141
+C++,numeric_transform,"Element-wise numeric transform",2,46.628250000000,334702.664900351141
+C++,numeric_transform,"Element-wise numeric transform",3,46.174666000000,334702.664900351141
+C++,numeric_transform,"Element-wise numeric transform",4,46.479375000000,334702.664900351141
+C++,numeric_transform,"Element-wise numeric transform",5,48.221750000000,334702.664900351141
+C++,numeric_transform,"Element-wise numeric transform",6,48.169041000000,334702.664900351141
+C++,numeric_transform,"Element-wise numeric transform",7,47.629334000000,334702.664900351141
+C++,sorting,"Numeric sorting",1,68.896375000000,1.499331194278
+C++,sorting,"Numeric sorting",2,68.599458000000,1.499331194278
+C++,sorting,"Numeric sorting",3,70.147041000000,1.499331194278
+C++,sorting,"Numeric sorting",4,69.025416000000,1.499331194278
+C++,sorting,"Numeric sorting",5,68.230000000000,1.499331194278
+C++,sorting,"Numeric sorting",6,68.096959000000,1.499331194278
+C++,sorting,"Numeric sorting",7,68.011917000000,1.499331194278
+C++,group_sum,"Group-by summation",1,2.177416000000,2502601.286957268603
+C++,group_sum,"Group-by summation",2,2.319917000000,2502601.286957268603
+C++,group_sum,"Group-by summation",3,2.364709000000,2502601.286957268603
+C++,group_sum,"Group-by summation",4,2.185125000000,2502601.286957268603
+C++,group_sum,"Group-by summation",5,2.199333000000,2502601.286957268603
+C++,group_sum,"Group-by summation",6,2.169667000000,2502601.286957268603
+C++,group_sum,"Group-by summation",7,2.180584000000,2502601.286957268603
+C++,text_parse,"Text field parsing",1,4.217167000000,124661250.000000000000
+C++,text_parse,"Text field parsing",2,4.205042000000,124661250.000000000000
+C++,text_parse,"Text field parsing",3,4.187333000000,124661250.000000000000
+C++,text_parse,"Text field parsing",4,4.086042000000,124661250.000000000000
+C++,text_parse,"Text field parsing",5,4.136083000000,124661250.000000000000
+C++,text_parse,"Text field parsing",6,4.092875000000,124661250.000000000000
+C++,text_parse,"Text field parsing",7,4.093750000000,124661250.000000000000

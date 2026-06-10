@@ -210,7 +210,7 @@ int main() {
       {"text_parse", "Text field parsing", [&]() { return text_parse_checksum(text_data); }},
   };
 
-  std::cout << "language,task_id,task_name,iteration,elapsed_ms,checksum\n";
+  std::cout << "implementation,task_id,task_name,iteration,elapsed_ms,checksum\n";
   for (const Task &task : tasks) {
     run_task(task, iterations);
   }

@@ -8,6 +8,11 @@ This directory contains a small, reproducible benchmark comparing R and C++ acro
 - Group-by summation
 - Text field parsing
 
+When available, the R benchmark also adds package variants:
+
+- `Matrix` for dense matrix multiplication
+- `data.table` for numeric sorting and group-by summation
+
 Run everything with:
 
 ```sh
